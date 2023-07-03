@@ -74,6 +74,7 @@
   <div class="container">
    상세페이지임
    <button id="edit">수정</button>
+   <button id="chat">채팅</button>
     <div class="detail-pic my-4" style="background-image: url('https://placeimg.com/640/380/tech');"></div>
     <div>
       <h5 class="username"></h5>
@@ -85,15 +86,32 @@
 <script>
  const db = firebase.firestore();
  const storage = firebase.storage();
- var 쿼리스트링= new URLSearchParams(window.location.search)
+ var 쿼리스트링= new URLSearchParams(window.location.search);
+
+ var 판매자uid;
+ var 상품명;
 db.collection('product').doc(쿼리스트링.get('id')).get().then((result)=>    {
     $('.username').html('올린사람 : '+result.data().이름)
     $('.title').html(result.data().제목)
     $('.date').html(result.data().날짜)
     $('.price').html(result.data().가격)
     $('.detail-pic').css('background-image', `url(${result.data().이미지})`)
-})
+    판매자uid=result.data().uid;
+    상품명=result.data().제목;
+  })
 
+
+var 내uid =JSON.parse(localStorage.getItem('user')).uid
+$('#chat').click(function(){
+ var 데이터 ={ 
+   who: [내uid,판매자uid],
+   product:상품명,
+   date: new Date()
+ }
+ console.log(데이터)
+ db.collection('chatroom').add(데이터)
+}
+)
 $('#edit').click(function(){
     window.location.href ='/edit.html?id='+쿼리스트링.get('id')
 })

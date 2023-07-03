@@ -86,14 +86,12 @@
  const db = firebase.firestore();
 
  const storage = firebase.storage();
-
-
  $('#send').click(function(){
 
 
   var file = document.querySelector('#image').files[0];
   var storageRef = storage.ref();
-  var 저장할경로 = storageRef.child('image/' + '파일명');
+  var 저장할경로 = storageRef.child('image/' + file.name);
   var 업로드작업 = 저장할경로.put(file)
 
   업로드작업.on( 'state_changed', 
